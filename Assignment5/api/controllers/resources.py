@@ -28,3 +28,12 @@ def update(db: Session, resource_id: int, resource: schemas.ResourceUpdate):
     db_resource.update(update_data, synchronize_session=False)
     db.commit()
     return db_resource.first()
+
+def delete(db: Session, resource_id: int):
+    db_resource = db.query(models.Resource).filter(models.Resource.id == resource_id)
+    if db_resource.first() is None:
+        raise HTTPException(status_code=404, detail="Resource not found")
+
+    db_resource.delete(synchronize_session=False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
