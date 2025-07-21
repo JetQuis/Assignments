@@ -20,3 +20,11 @@ def read_all(db: Session):
 
 def read_one(db: Session, resource_id: int):
     return db.query(models.Resource).filter(models.Resource.id == resource_id).first()
+
+
+def update(db: Session, resource_id: int, resource: schemas.ResourceUpdate):
+    db_resource = db.query(models.Resource).filter(models.Resource.id == resource_id)
+    update_data = resource.model_dump(exclude_unset=True)
+    db_resource.update(update_data, synchronize_session=False)
+    db.commit()
+    return db_resource.first()
