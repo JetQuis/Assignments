@@ -14,3 +14,9 @@ def create(db: Session, resource: schemas.ResourceCreate):
     db.refresh(db_resource)
     return db_resource
 
+def read_all(db: Session):
+    return db.query(models.Resource).all()
+
+
+def read_one(db: Session, resource_id: int):
+    return db.query(models.Resource).filter(models.Resource.id == resource_id).first()
